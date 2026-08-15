@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m pytest tests/test_security.py -v)",
+      "Bash(python -m pytest tests/test_api.py -v)",
+      "Bash(python -m pytest tests/test_api.py::TestSafeMessages::test_safe_messages_pass -v --tb=short)",
+      "Bash(python -c \"import pytest_asyncio; print\\(pytest_asyncio.__version__\\)\")"
+    ]
+  }
+}

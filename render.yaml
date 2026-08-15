@@ -1,0 +1,39 @@
+# render.yaml - infrastructure as Code for Render
+services:
+  - type: web
+    name: production-langgraph-api
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: pip install uv && uv sync --frozen --no-dev
+    startCommand: nv run uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13"
+      - key: APP_ENV
+        value: production 
+      - key: LOG_LEVEL
+        value: INFO
+      - key: RATE LIMIT
+        value: "3/minute"
+      - key: CACHE_TTL_SECONDS
+        value: "300"
+      - key: MAX_RETRIES
+        value: "3"
+      - key: PRIMARY_MODEL
+        value: MiniMax-M3
+      - key: FALLBACK_MODEL
+        value: MiniMax-M3
+      - key: OPENAI_API_KEY
+        sync: false #Must be set manually -- Never commit secrets
+      - key: LANGCHAIN_API_KEY
+        sync: false #Must be set manually
+      - key: LANGCHAIN_TRACING_V2
+        value: "true"
+      - key: LANGCHAIN_PROJECT
+        value: production-api 
+    healthCheckPath: /health
+    autoDeploy: true
+    
+
+  
