@@ -25,7 +25,6 @@ services:
       - key: FALLBACK_MODEL
         value: MiniMax-M3
       - key: OPENAI_API_KEY
-        sync: false #Must be set manually -- Never commit secrets
       - key: LANGCHAIN_API_KEY
         sync: false #Must be set manually
       - key: LANGCHAIN_TRACING_V2
