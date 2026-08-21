@@ -24,26 +24,26 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/productionAPI:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/production_api:latest
 
 
   # job 2: Deploy the image on a self-hosted runner
   deploy:
-    runs-on: self-hosted
+    runs-on: [self-hosted, noIP]
     needs: build-and-push
     steps:
       - name: Pull and Restart App Container 
         run: |
           # Stop the existing container if it is running
-          docker stop productionAPI || true
-          docker rm productionAPI || true
+          docker stop production_api || true
+          docker rm production_api || true
 
           # Pull the latest image from Docker Hub
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/productionAPI:latest
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/production_api:latest
 
           # Run the updated container with the new image
-          docker run -d --name productionAPI -p 80:80 --restart always ${{ secrets.DOCKERHUB_USERNAME }}/productionAPI:latest
-
+          docker run -d --name production_api -p 80:80 --restart unless-stopped ${{ secrets.DOCKERHUB_USERNAME }}/production_api:latest
+    
           # Clean up dangling images to free up space
           docker image prune -f
 
