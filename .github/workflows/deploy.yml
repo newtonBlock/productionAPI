@@ -34,17 +34,23 @@ jobs:
     steps:
       - name: Pull and Restart App Container 
         run: |
-          # Stop the existing container if it is running
+          # 1. Stop the existing container if it is running
           docker stop production_api || true
           docker rm production_api || true
 
-          # Pull the latest image from Docker Hub
+          # 2. Pull the latest image from Docker Hub
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/production_api:latest
 
-          # Run the updated container with the new image
-          docker run -d --name production_api -p 80:80 --restart unless-stopped ${{ secrets.DOCKERHUB_USERNAME }}/production_api:latest
+          # 3. Create a temporary .env file from Github Secrets
+          echo "${{ secrets.ENV_FILE_CONTENT }}" > .env
+
+          # 4. Run the updated container with the new image and inject the file
+          docker run -d --name production_api -p 80:80 --restart unless-stopped --env-file .env ${{ secrets.DOCKERHUB_USERNAME }}/production_api:latest
+
+          # 5. Securely remove the temporary .env file after use
+          rm -f .env
     
-          # Clean up dangling images to free up space
+          # 6. Clean up dangling images to free up space
           docker image prune -f
 
     
