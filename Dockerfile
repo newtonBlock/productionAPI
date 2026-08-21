@@ -23,11 +23,11 @@ RUN uv sync --frozen --no-dev
 COPY --chown=appuser:appuser  app/ app/
 
 #EXPOSE PORT
-EXPOSE 8000
+EXPOSE 8817
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
-    CMD curl -f http://localhost:8000/health || exit 1
+    CMD curl -f http://localhost:8817/health || exit 1
 
 # Run with uvicorn
-CMD [ "uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000" ]
+CMD [ "uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8817" ]
