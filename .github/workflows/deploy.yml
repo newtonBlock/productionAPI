@@ -45,7 +45,7 @@ jobs:
           echo "${{ secrets.ENV_FILE_CONTENT }}" > .env
 
           # 4. Run the updated container with the new image and inject the file
-          docker run -d --name production_api -p 80:80 --restart unless-stopped --env-file .env ${{ secrets.DOCKERHUB_USERNAME }}/production_api:latest
+          docker run -d --name production_api -p 8817:8817 --restart unless-stopped --env-file .env ${{ secrets.DOCKERHUB_USERNAME }}/production_api:latest
 
           # 5. Securely remove the temporary .env file after use
           rm -f .env
